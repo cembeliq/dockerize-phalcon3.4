@@ -1,0 +1,44 @@
+version: '3'
+
+services:
+  web:
+    container_name: phalcon-web
+    image: nginx:latest
+    volumes:
+      - ./app:/var/www/html
+      - ./default.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - '8083:80'
+    depends_on:
+      - fpm
+    links:
+      - fpm
+
+  fpm:
+    container_name: phalcon-app
+    build: .
+    working_dir: /var/www/html
+    volumes:
+      - ./app:/var/www/html
+    expose:
+      - '9000'
+    depends_on:
+      - db
+    links:
+      - db
+
+  db:
+    container_name: phalcon-db
+    image: mariadb
+    environment:
+      MYSQL_DATABASE: phalcon_app
+      MYSQL_ROOT_PASSWORD: phalcon_app
+    ports:
+      - '3306:3306'
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./db:/var/lib/mysql
+
+networks:
+  bridge:
+    driver: bridge

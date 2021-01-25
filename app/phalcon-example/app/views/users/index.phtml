@@ -1,0 +1,45 @@
+<?php
+
+/**
+ * @var \Phalcon\Mvc\View\Engine\Php $this
+ */
+?>
+
+<div class="page-header">
+    <h1>List users</h1>
+    <p><?php echo $this->tag->linkTo(["users/new", "Create users"]) ?></p>
+</div>
+
+<?php echo $this->getContent() ?>
+
+<?php echo $this->flash->output() ?>
+
+<div class="row">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Email</th>
+                <th>Name</th>
+                <th>Address</th>
+
+                <th colspan="2">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($users as $user) : ?>
+                <tr>
+                    <td><?php echo $user->id ?></td>
+                    <td><?php echo $user->email ?></td>
+                    <td><?php echo $user->name ?></td>
+                    <td><?php echo $user->address ?></td>
+
+                    <td><?php echo $this->tag->linkTo(["users/edit/" . $user->id, "Edit"]); ?></td>
+                    <td><?php echo $this->tag->linkTo(["users/delete/" . $user->id, "Delete"]); ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+
+
